@@ -31,20 +31,19 @@ export default function AddItem() {
     const[value,setValue] = useState({});
 
     const handleFormSubmit = async (data) =>{
-
+      console.log(data)
       const obj={
-        id:data.id,
         name:data.name,
         price:data.price
 
       }
       const res = await axios.post (
-        'http://localhost:8082/Shopping_Platform/rest/items',obj
-      );
+        '/items',obj)
+        console.log(res);
       setValue(res.data);
+     
       
 
-      console.log(res);
 			if (res === 200) {
 			alert('Form submitted Successfully');
 			} else {
@@ -74,23 +73,9 @@ export default function AddItem() {
             <form onSubmit={handleSubmit(handleFormSubmit)}>
             <Grid container spacing={2}>
             <Grid item sm={12}>
-                                                <Controller
-												as={TextField}
-												className=""
-												{...register('id', { required: true })}
-												label="id"
-												autoFocus
-												
-												name="id"
-												defaultValue=""
-												control={control}
-												variant="outlined"
-                                                fullWidth
-                                                
-											
-											/></Grid>
+            </Grid>
                 <Grid item sm={12}>
-                                                <Controller
+                       <Controller
 												as={TextField}
 												
 												{...register('name', { required: true })}
@@ -101,12 +86,12 @@ export default function AddItem() {
 												defaultValue=""
 												control={control}
 												variant="outlined"
-                                                fullWidth
+                      fullWidth
                                                 
 											
 											/></Grid>
-                                        <Grid item sm={12}>
-                                                <Controller
+                    <Grid item sm={12}>
+                        <Controller
 												as={TextField}
 												className=""
 												{...register('price', { required: true })}

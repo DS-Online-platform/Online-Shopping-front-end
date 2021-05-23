@@ -66,7 +66,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function StickyHeadTable() {
+export default function ItemList() {
   const classes = useStyles();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -77,6 +77,18 @@ export default function StickyHeadTable() {
     const res = await axiosInstance.get('/items');
     return res.data;
   }
+
+  const deleteItem = async (id) => {
+    await axiosInstance.delete(`/items/${id}`);
+    console.log(id);
+    const newItemList = data.filter((data) => {
+      return data.id !==id;
+    });
+    console.log(id);
+
+    setData(newItemList);
+  }
+
   useEffect(() =>{
     const fetchItem = async () =>{
       const allItems = await getItems();
@@ -102,6 +114,7 @@ export default function StickyHeadTable() {
           <Grid container justify="center" spacing={2}>
               <Grid item sm={2}></Grid>
               <Grid style={{paddingTop:'30px'}} item sm={10}>
+            
               <Paper className={classes.root}>
              
       <TableContainer className={classes.container}>
@@ -121,9 +134,12 @@ export default function StickyHeadTable() {
           </TableHead>
           <TableBody>
 							{data.map(row => {
-								return <ItemRows key={row.id} {...row} />;
+								return <ItemRows  key={row.id} {...row}  />;
+              
 							})}
 						</TableBody>
+            
+            
         </Table>
       </TableContainer>
      

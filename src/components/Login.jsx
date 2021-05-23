@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useState} from 'react'
 import {Card,TextField,CardContent,Grid,Container,Button,Typography} from '@material-ui/core';
 import { Controller, useForm } from "react-hook-form";
 import NavBar from "./NavBar";
@@ -7,7 +7,7 @@ import {Link} from "react-router-dom";
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 
 import { green,orange } from '@material-ui/core/colors';
-
+import {httpPost} from './services/getAxios';
 
 
 const theme = createMuiTheme({
@@ -26,6 +26,44 @@ export default function Login() {
     const {register,handleSubmit,control} = useForm({});
     const onSubmit = data => {console.log(data);
     }
+    const[mobile,setMobile] = useState('');
+    const[password,setPassword] = useState('');
+    const [signin,setSignIn] = useState('');
+
+
+    const loginApi = async ()=>{
+      if(mobile == ""){
+        alert("Mobile should not be empty");
+        return;
+      }else if(password == ""){
+        alert("password should not be empty");
+        return;
+      }
+      let jsonOBj = {"mobile":mobile,"password":password }
+      
+     await httpPost("login/user",jsonOBj)
+      .then(res => res.json())
+      .then((res)=>{
+        if(res['token'] != null){
+          localStorage.setItem("token",res['token']);//token
+          localStorage.setItem("user_id",res['user_profile_details']['user_id']);//user_id
+        
+          setTimeout(() => {
+            window.location.href = `${window.location.origin}/home`;
+          }, 1000);
+          //getCategory();
+        }else{
+          alert(res['message']);	
+        }
+        
+        //console.log(res);
+        
+      },error=>{
+        alert(error.message);
+      }
+      )
+    }
+    
     return (
         <div>
             
@@ -42,27 +80,32 @@ export default function Login() {
                             <Typography   style={{fontWeight:'bold',textAlign:'center'}} variant="h6" >
  Login
 </Typography>
-            <form style={{paddingTop:'30px'}} onSubmit={handleSubmit(onSubmit)}>
+            <form style={{paddingTop:'30px'}} onSubmit={handleSubmit(loginApi)}>
             <Grid container spacing={2}>
             <Grid item sm={12}>
-                                                <Controller
+                         {/* <Controller
 												as={TextField}
                                                 size="small"
 												className=""
-												{...register('UserName', { required: true })}
-												label="Username"
+												{...register('Mobile', { required: true })}
+												label="Mobile"
 												autoFocus
 												
-												name="Username"
+												name="Mobile"
 												defaultValue=""
 												control={control}
 												variant="outlined"
                                                 fullWidth
                                                 
 											
-											/></Grid>
+											/> */}
+
+<input onChange={(e)=>setMobile(e.target.value)} name="Mobile" placeholder="Enter Mobile" type="text" required=""/>						
+
+                      
+                      </Grid>
                 <Grid item sm={12}>
-                                                <Controller
+                       {/* <Controller
 												as={TextField}
 												size='small'
 												{...register('Password', { required: true })}
@@ -76,10 +119,14 @@ export default function Login() {
                                                 fullWidth
                                                 
 											
-											/></Grid>
+											/> */}
+              	<input onChange={(e)=>setPassword(e.target.value)} name="Password" placeholder="Enter Password" type="password" required=""/>						
+
+                      
+                      </Grid>
                                         
                         <Grid item xs={12}>                
-                 <Link to ='/items'> <Button
+                  <Button
                 
                     style={{
                       color: '#ffffff',
@@ -100,7 +147,7 @@ export default function Login() {
                     fullWidth
                   >
                     Submit
-                </Button></Link>
+                </Button>
                 <Typography
                 color="#ff781f"
                 variant="body1"

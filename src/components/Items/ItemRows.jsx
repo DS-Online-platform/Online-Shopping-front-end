@@ -6,7 +6,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 
 
 
-const ItemRows = ({ id, name,price }) => {
+const ItemRows = ({ id, name,price,onClick }) => {
 	
 	return (
 		<TableRow>
@@ -18,13 +18,13 @@ const ItemRows = ({ id, name,price }) => {
 				{price}
 			</TableCell>
 			<TableCell width="10%" align="left">
-				<Button component={Link} to={`/EditCeremony/${id}`} style={{ color: '#ff8b3d' }}>
+				<Button style={{ color: '#ff8b3d' }}>
 					{' '}
 					<EditIcon />
 				</Button>
-				<Button component={Link} to={`/Participants/${id}`} style={{ color: '#ff8b3d' }}>
+				<Button onClick style={{ color: '#ff8b3d' }}>
 					{' '}
-					<DeleteIcon />
+					<DeleteIcon  />
 				</Button>
 			</TableCell>
 			
